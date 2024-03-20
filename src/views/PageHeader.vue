@@ -4,7 +4,7 @@
         <el-menu-item index="0">
             <img style="width: 100px" src="../assets/images/element-plus-logo.svg" alt="Element logo" @click="backToHomePage"/>
         </el-menu-item>
-        <el-menu-item index="1">Processing Center</el-menu-item>
+        <el-menu-item index="1">小工具列表</el-menu-item>
         <el-sub-menu index="2">
             <template #title>Workspace</template>
             <el-menu-item index="2-1">item one</el-menu-item>
