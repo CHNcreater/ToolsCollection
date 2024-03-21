@@ -19,7 +19,7 @@
         </el-sub-menu>
         <div class="flex-grow" />
         <el-button type="primary">Sign Up</el-button>
-        <el-button type="primary" @click="onClickLoginIn">Sign In</el-button>
+        <el-button id="signInBtn" type="primary" @click="onClickLoginIn">Sign In</el-button>
     </el-menu>
 </template>
 
@@ -47,5 +47,9 @@ const onClickLoginIn = () => {
 
 .flex-grow {
     flex-grow: 1;
+}
+
+#signInBtn {
+    margin-right: 10px;
 }
 </style>

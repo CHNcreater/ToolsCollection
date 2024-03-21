@@ -3,13 +3,13 @@ const cardData = [
         id:"1",
         title:"生成GUID",
         description:"随机生成一个GUID",
-        url:"/generate-guid",
+        url:"/tools/generate-guid",
     },
     {
         id:"2",
-        title:"Card 2",
-        description:"This is the second card",
-        image:"https://via.placeholder.com/150"
+        title:"日期计算器",
+        description:"计算日期",
+        url:"/tools/calculate-date"
     },
     {
         id:"3",

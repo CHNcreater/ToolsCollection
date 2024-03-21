@@ -98,7 +98,7 @@ main {
 }
 
 .el-form-item :deep(textarea) {
-    max-width: 400px;
+    min-width: 400px;
 }
 
 #action-button {

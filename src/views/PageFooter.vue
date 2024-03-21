@@ -4,7 +4,6 @@ import { ref } from 'vue'
 
 <template>
     <div class="page-footer">
-        <h1>This is a page footer</h1>
     </div>
 </template>
 
