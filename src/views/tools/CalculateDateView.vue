@@ -45,7 +45,7 @@
                 <el-input v-model="inputDays" placeholder="请输入日数"></el-input>
                 <el-button type="primary" @click="calculateFuture">计算</el-button>
                 <div id="future-day-result" v-if="futureDate !== ''">
-                    {{ futureDate }}
+                    <div style="font-weight: bold; font-size: 24px;">{{ futureDate }}</div>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="计算几天前日期" name="past">计算几天前日期</el-tab-pane>
@@ -57,6 +57,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import type { TabsPaneContext } from 'element-plus';
+import date from 'date-and-time';
 
 const activeName = ref('days');
 
@@ -97,9 +98,20 @@ const calculateFuture = () => {
     if (currentDate.value === '') {
         return;
     }
+    futureDate.value = currentDate.value;
     if (inputYears.value !== 0) {
-        currentDate.value = currentDate.value.getTime();
+        futureDate.value = date.addYears(futureDate.value, inputYears.value);
     }
+    if (inputMonths.value !== 0) {
+        futureDate.value = date.addMonths(futureDate.value, inputMonths.value);
+    }
+    if (inputWeeks.value !== 0) {
+        futureDate.value = date.addDays(futureDate.value, inputWeeks.value * 7);
+    }
+    if (inputDays.value !== 0) {
+        futureDate.value = date.addDays(futureDate.value, inputDays.value);
+    }
+    futureDate.value = futureDate.value.toLocaleDateString('zh-CN', {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'});
 }
 </script>
 <style scoped>
@@ -175,5 +187,13 @@ p {
 
 .el-tabs :deep(#future-day-result) {
     margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 </style>
