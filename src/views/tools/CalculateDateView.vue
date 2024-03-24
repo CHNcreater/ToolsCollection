@@ -20,15 +20,18 @@
                     </div>
                     <div id="result-table">
                         <div>两个日期之间的周数</div>
-                        <div style="font-size: large; font-weight: bold; font-size: 32px;">{{ (days / 7).toFixed(2) }}</div>
+                        <div style="font-size: large; font-weight: bold; font-size: 32px;">{{ (days / 7).toFixed(2) }}
+                        </div>
                     </div>
                     <div id="result-table">
                         <div>两个日期之间的月数</div>
-                        <div style="font-size: large; font-weight: bold; font-size: 32px;">{{ (days / 30).toFixed(2) }}</div>
+                        <div style="font-size: large; font-weight: bold; font-size: 32px;">{{ (days / 30).toFixed(2) }}
+                        </div>
                     </div>
                     <div id="result-table">
                         <div>两个日期之间的年数</div>
-                        <div style="font-size: large; font-weight: bold; font-size: 32px;">{{ (days / 365).toFixed(2) }}</div>
+                        <div style="font-size: large; font-weight: bold; font-size: 32px;">{{ (days / 365).toFixed(2) }}
+                        </div>
                     </div>
                 </div>
             </el-tab-pane>
@@ -48,8 +51,35 @@
                     <div style="font-weight: bold; font-size: 24px;">{{ futureDate }}</div>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="计算几天前日期" name="past">计算几天前日期</el-tab-pane>
-            <el-tab-pane label="UTC时间" name="utc">计算UTC时间</el-tab-pane>
+            <el-tab-pane label="计算几天前日期" name="past">
+                <p>开始日期</p>
+                <el-date-picker v-model="currentDate1" type="date" placeholder="Pick a day" :size="size" />
+                <p>年数</p>
+                <el-input v-model="inputYears1" placeholder="请输入年数"></el-input>
+                <p>月数</p>
+                <el-input v-model="inputMonths1" placeholder="请输入月数"></el-input>
+                <p>周数</p>
+                <el-input v-model="inputWeeks1" placeholder="请输入周数"></el-input>
+                <p>日数</p>
+                <el-input v-model="inputDays1" placeholder="请输入日数"></el-input>
+                <el-button type="primary" @click="calculatePast">计算</el-button>
+                <div id="future-day-result" v-if="pastDate !== ''">
+                    <div style="font-weight: bold; font-size: 24px;">{{ pastDate }}</div>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="UTC时间" name="utc">
+                <p>选择日期和时间</p>
+                <el-date-picker 
+                v-model="dateTime" 
+                type="datetime" 
+                placeholder="Pick a date and time" 
+                :size="size"
+                :shortcuts="shortcuts" />
+                <el-button type="primary" @click="calculateUTCTime">计算UTC时间</el-button>
+                <div id="future-day-result" v-if="utcDateTime !== ''">
+                    <div>{{ utcDateTime }}</div>
+                </div>
+            </el-tab-pane>
         </el-tabs>
     </main>
 
@@ -111,7 +141,69 @@ const calculateFuture = () => {
     if (inputDays.value !== 0) {
         futureDate.value = date.addDays(futureDate.value, inputDays.value);
     }
-    futureDate.value = futureDate.value.toLocaleDateString('zh-CN', {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'});
+    futureDate.value = futureDate.value.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+}
+
+const currentDate1 = ref('');
+const pastDate = ref('');
+const inputYears1 = ref(0);
+const inputMonths1 = ref(0);
+const inputWeeks1 = ref(0);
+const inputDays1 = ref(0);
+
+const calculatePast = () => {
+    if (currentDate1.value === '') {
+        return;
+    }
+    pastDate.value = currentDate1.value;
+    if (inputYears1.value !== 0) {
+        pastDate.value = date.addYears(pastDate.value, -inputYears1.value);
+    }
+    if (inputMonths1.value !== 0) {
+        pastDate.value = date.addMonths(pastDate.value, -inputMonths1.value);
+    }
+    if (inputWeeks1.value !== 0) {
+        pastDate.value = date.addDays(pastDate.value, -inputWeeks1.value * 7);
+    }
+    if (inputDays1.value !== 0) {
+        pastDate.value = date.addDays(pastDate.value, -inputDays1.value);
+    }
+    pastDate.value = pastDate.value.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+}
+
+const dateTime = ref('');
+const utcDateTime = ref('');
+const shortcuts = [
+    {
+        text: 'Today',
+        value: new Date(),
+    },
+    {
+        text: 'Yesterday',
+        value: () => {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            return date
+        },
+    },
+    {
+        text: 'A week ago',
+        value: () => {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            return date
+        },
+    },
+];
+
+const calculateUTCTime = () => {
+    let utcYear = dateTime.value.getUTCFullYear();  
+    let utcMonth = dateTime.value.getUTCMonth();  
+    let utcDateDay = dateTime.value.getUTCDate();  
+    let utcHours = dateTime.value.getUTCHours();  
+    let utcMinutes = dateTime.value.getUTCMinutes();  
+    let utcSeconds = dateTime.value.getUTCSeconds(); 
+    utcDateTime.value = `${utcYear}年${utcMonth + 1}月${utcDateDay}日${utcHours}:${utcMinutes}:${utcSeconds}`;
 }
 </script>
 <style scoped>
